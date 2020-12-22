@@ -29,14 +29,18 @@ public class TitlesPanel extends JPanel implements ActionListener
         (this.animation = new Timer(50, this)).setInitialDelay(50);
         this.animation.start();
     }
-    
+    /**
+	*@Override check if the figure is drawn
+	*/ 
     @Override
     public void actionPerformed(final ActionEvent arg0) {
         if (this.is_done) {
             this.repaint();
         }
     }
-    
+    /**
+	*doDrawing Method for turning shapes
+	*/
     private void doDrawing(final Graphics g) {
         this.is_done = false;
         (this.g2d = (Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

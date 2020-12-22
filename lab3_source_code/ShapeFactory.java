@@ -20,7 +20,9 @@ public class ShapeFactory
     public Paint paint;
     public int width;
     public int height;
-    
+	/**
+	*ShapeFactory Shape creation function
+	*/
     public ShapeFactory(final int shape_type) {
         this.width = 25;
         this.height = 25;
@@ -72,6 +74,9 @@ public class ShapeFactory
                 this.paint = new GradientPaint((float)(-this.width), (float)(-this.height), Color.white, (float)this.width, (float)this.height, Color.gray, true);
                 break;
             }
+			/**
+			*case 8 This parameter describes the color of the shapes
+			*/
             case 8: {
                 this.paint = new GradientPaint((float)(-this.width), (float)(-this.height), Color.white, (float)this.width, (float)this.height, Color.gray, true);
                 break;
