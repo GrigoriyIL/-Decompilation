@@ -73,7 +73,7 @@ public class ShapeFactory
                 break;
             }
             case 8: {
-                this.paint = Color.blue;
+                this.paint = new GradientPaint((float)(-this.width), (float)(-this.height), Color.white, (float)this.width, (float)this.height, Color.gray, true);
                 break;
             }
             default: {
