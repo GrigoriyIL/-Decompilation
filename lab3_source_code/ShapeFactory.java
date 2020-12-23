@@ -16,31 +16,45 @@ import java.awt.Shape;
 public class ShapeFactory
 {
     public Shape shape;
-    public BasicStroke stroke;
+    public BasicStroke stroke = new BasicStroke(3.0f);
     public Paint paint;
-    public int width;
-    public int height;
+    public int width = 25;
+    public int height = 25;
+	
+		enum shape_forma {
+        hexahedron,
+        star,
+        quadrate,
+        triangle,
+        pakman
+    }
+	
+		enum shape_prop {
+        three_pixels,
+        zero,
+        seven_pixels,
+        gradient,
+        red
+    }
+
 	/**
 	*ShapeFactory Shape creation function
 	*/
-    public ShapeFactory(final int shape_type) {
-        this.width = 25;
-        this.height = 25;
-        this.stroke = new BasicStroke(3.0f);
-        switch (shape_type / 60) {
-            case 1: {
+    public ShapeFactory( final shape_forma shape_type, final shape_prop shape_param) {
+        switch (shape_type) {
+            case hexahedron: {
                 this.shape = createStar(3, new Point(0, 0), this.width / 2.0, this.width / 2.0);
                 break;
             }
-            case 3: {
+            case star: {
                 this.shape = createStar(5, new Point(0, 0), this.width / 2.0, this.width / 4.0);
                 break;
             }
-            case 5: {
+            case quadrate: {
                 this.shape = new Rectangle2D.Double(-this.width / 2.0, -this.height / 2.0, this.width, this.height);
                 break;
             }
-            case 7: {
+            case triangle: {
                 final GeneralPath path = new GeneralPath();
                 final double tmp_height = Math.sqrt(2.0) / 2.0 * this.height;
                 path.moveTo(-this.width / 2, -tmp_height);
@@ -50,7 +64,7 @@ public class ShapeFactory
                 this.shape = path;
                 break;
             }
-            case 9: {
+            case pakman: {
                 this.shape = new Arc2D.Double(-this.width / 2.0, -this.height / 2.0, this.width, this.height, 30.0, 300.0, 2);
                 break;
             }
@@ -58,27 +72,27 @@ public class ShapeFactory
                 throw new Error("type is nusupported");
             }
         }
-        switch (shape_type % 10) {
-            case 1: {
+        switch (shape_param) {
+            case three_pixels: {
                 this.stroke = new BasicStroke(3.0f);
                 break;
             }
-            case 3: {
+            case zero: {
                 break;
             }
-            case 4: {
+            case seven_pixels: {
                 this.stroke = new BasicStroke(7.0f);
                 break;
             }
-            case 7: {
+            case gradient: {
                 this.paint = new GradientPaint((float)(-this.width), (float)(-this.height), Color.white, (float)this.width, (float)this.height, Color.gray, true);
                 break;
             }
 			/**
 			*case 8 This parameter describes the color of the shapes
 			*/
-            case 8: {
-                this.paint = new GradientPaint((float)(-this.width), (float)(-this.height), Color.white, (float)this.width, (float)this.height, Color.gray, true);
+            case red: {
+                this.paint = Color.red;
                 break;
             }
             default: {

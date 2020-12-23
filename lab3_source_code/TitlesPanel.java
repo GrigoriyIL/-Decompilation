@@ -18,15 +18,16 @@ public class TitlesPanel extends JPanel implements ActionListener
 {
     private Graphics2D g2d;
     private Timer animation;
-    private boolean is_done;
-    private int start_angle;
-    private int shape;
+    private boolean is_done = true;
+    private int start_angle = 0;
+    private ShapeFactory.shape_forma shape_forma;
+    private ShapeFactory.shape_prop shape_prop;
     
-    public TitlesPanel(final int _shape) {
-        this.start_angle = 0;
-        this.is_done = true;
-        this.shape = _shape;
-        (this.animation = new Timer(50, this)).setInitialDelay(50);
+    public TitlesPanel(ShapeFactory.shape_forma _shape_forma, ShapeFactory.shape_prop _shape_prop) {
+        this.shape_forma = _shape_forma;
+        this.shape_prop = _shape_prop;
+        this.animation = new Timer(50, this);
+        this.animation.setInitialDelay(50);
         this.animation.start();
     }
     /**
@@ -41,32 +42,38 @@ public class TitlesPanel extends JPanel implements ActionListener
     /**
 	*doDrawing Method for turning shapes
 	*/
-    private void doDrawing(final Graphics g) {
+    private void doDrawing(Graphics g) {
         this.is_done = false;
-        (this.g2d = (Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        final Dimension size = this.getSize();
-        final Insets insets = this.getInsets();
-        final int w = size.width - insets.left - insets.right;
-        final int h = size.height - insets.top - insets.bottom;
-        final ShapeFactory shape = new ShapeFactory(this.shape);
+        this.g2d = (Graphics2D)g;
+        this.g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Dimension size = this.getSize();
+        Insets insets = this.getInsets();
+        int w = size.width - insets.left - insets.right;
+        int h = size.height - insets.top - insets.bottom;
+        ShapeFactory shape = new ShapeFactory(this.shape_forma, this.shape_prop);
         this.g2d.setStroke(shape.stroke);
         this.g2d.setPaint(shape.paint);
         double angle = this.start_angle++;
         if (this.start_angle > 360) {
             this.start_angle = 0;
         }
-        final double dr = 90.0 / (w / (shape.width * 1.5));
-        for (int j = shape.height; j < h; j += (int)(shape.height * 1.5)) {
-            for (int i = shape.width; i < w; i += (int)(shape.width * 1.5)) {
-                angle = ((angle > 360.0) ? 0.0 : (angle + dr));
-                final AffineTransform transform = new AffineTransform();
-                transform.translate(i, j);
-                transform.rotate(Math.toRadians(angle));
-                this.g2d.draw(transform.createTransformedShape(shape.shape));
-            }
-        }
-        this.is_done = true;
-    }
+		
+		double dr = 90.0 / ((double)w / ((double)shape.width * 1.5));
+        int j = shape.height;
+		while (j < h) {
+			int i = shape.width;
+			while (i < w) {
+				angle = angle > 360.0 ? 0.0 : angle + dr;
+				AffineTransform transform = new AffineTransform();
+				transform.translate(i, j);
+				transform.rotate(Math.toRadians(angle));
+				this.g2d.draw(transform.createTransformedShape(shape.shape));
+				i = (int)((double)i + (double)shape.width * 1.5);
+			}
+			j = (int)((double)j + (double)shape.height * 1.5);
+			}
+			this.is_done = true;
+		}
     
     public void paintComponent(final Graphics g) {
         super.paintComponent(g);
